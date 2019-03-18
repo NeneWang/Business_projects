@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TestFaceDetection</title>
+    
+     <script src="jquery-3.3.1.js"></script>
+    <script src="jquery.facedetection.min.js"></script>
+    
+   <style>
+    
+    .face-box {
+  border: 5px solid #f00;
+  position:absolute;
+}
+       
+       
+    </style>
+</head>
+<body>
+  
+    <div id="wrapper">
+       <img src="test_image_3.jpg" id="picture"> 
+    </div>
+<script>
+    
+     
+    function markFaceByIndex(i){
+        $('#picture').faceDetection({
+            
+            complete: function(faces) {
+                $div = $("<div>", {
+                    "class": "face-box"
+                });
+                $div.css('top', faces[i].positionY);
+                $div.css('left', faces[i].positionX);
+                $div.css('width', faces[i].width);
+                $div.css('height', faces[i].height);
+                $("#wrapper").append($div);
+            }
+        });
+        return;
+    }
+    var i = 0
+    $("#picture").click(function() {
+        $('#picture').faceDetection({
+            
+            complete: function(faces) {
+                var amountFaces = faces.length;
+                for ( var i = 1; i<= amountFaces; i++){
+                    markFaceByIndex(i);
+                    console.log(i);
+                }
+                
+            }});
+        
+        markFaceByIndex(i);
+            
+            i++;
+        }
+
+    );
+   
+    </script>
+</body>
+
+
+</html>
