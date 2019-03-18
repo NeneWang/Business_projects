@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>chace Test</title>
+    <link rel="stylesheet" href="bootstrap.css">
+    <script src="chance.js"></script>
+    <script src="bootstrap.js"></script>
+    <script src="jquery-3.3.1.js"></script>
+
+</head>
+
+<body>
+
+<nav id="navbar-example2" class="navbar navbar-light bg-light position-relative">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <ul class="nav nav-pills">
+    <li class="nav-item">
+      <a class="nav-link" href="#fat">@fat</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#mdo">@mdo</a>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="#one">one</a>
+        <a class="dropdown-item" href="#two">two</a>
+        <div role="separator" class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#three">three</a>
+      </div>
+    </li>
+  </ul>
+</nav>
+<div data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+  <h4 id="fat">@fat</h4>
+  <p class=randomText>...</p>
+  <h4 id="mdo">@mdo</h4>
+  <p class=randomText>...</p>
+  <h4 id="one">one</h4>
+  <p class=randomText>...</p>
+  <h4 id="two">two</h4>
+  <p class=randomText>...</p>
+  <h4 id="three">three</h4>
+  <p class=randomText>...</p>
+</div>
+</body>
+<script>
+    $(".randomText").text(
+        chance.paragraph({
+            sentences: 10
+        }));
+</script>
+
+</html>

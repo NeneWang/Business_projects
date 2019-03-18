@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>pop_test</title>
+    <link rel="stylesheet" href="style.css">
+
+    <script src="jquery-3.3.1.js"></script>
+    <script src="jquery.popup.js"></script>
+</head>
+
+<body>
+
+    <div class="blocker"></div>
+    <div class="blocker"></div>
+    <div>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis illum, expedita error odio quidem quod ad impedit at dolores aperiam, sed explicabo, ullam natus. Quidem praesentium id enim quia ad.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis illum, expedita error odio quidem quod ad impedit at dolores aperiam, sed explicabo, ullam natus. Quidem praesentium id enim quia ad.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis illum, expedita error odio quidem quod ad impedit at dolores aperiam, sed explicabo, ullam natus. Quidem praesentium id enim quia ad.</p>
+
+    </div>
+    <div id="popup">
+        Popper.jsTutorial!1
+    </div>
+    <button id="button-a">Button</button>
+    <div class="blocker"></div>
+
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis illum, expedita error odio quidem quod ad impedit at dolores aperiam, sed explicabo, ullam natus. Quidem praesentium id enim quia ad.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis illum, expedita error odio quidem quod ad impedit at dolores aperiam, sed explicabo, ullam natus. Quidem praesentium id enim quia ad.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis illum, expedita error odio quidem quod ad impedit at dolores aperiam, sed explicabo, ullam natus. Quidem praesentium id enim quia ad.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis illum, expedita error odio quidem quod ad impedit at dolores aperiam, sed explicabo, ullam natus. Quidem praesentium id enim quia ad.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis illum, expedita error odio quidem quod ad impedit at dolores aperiam, sed explicabo, ullam natus. Quidem praesentium id enim quia ad.</p>
+
+
+
+    <script>
+        var ref = $('#button-a');
+        var popup = $("#popup");
+        popup.hide();
+        ref.click(function() {
+            popup.show();
+            var popper = new Popper(ref, popup, {
+                placement: 'top',
+                modifiers:{
+                    flip:{
+                        behavior:['left','right','top','botton']
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
