@@ -10,12 +10,15 @@ app.use(bodyParser.urlencoded({
 }));
 app.set("view engine", "ejs");
 
-mongoose.connect("mongodb://localhost:27017/yelp_camp", {useNewUrlParser: true})
+mongoose.connect("mongodb://localhost:27017/yelp_camp", {
+    useNewUrlParser: true
+})
 
 //SCHEMA SETUP
 var campgroundSchema = new mongoose.Schema({
     name: String,
-    image: String
+    image: String,
+    description: String
 });
 
 var Campground = mongoose.model("Campground", campgroundSchema);
@@ -37,21 +40,25 @@ app.post("/campgrounds", function (req, res) {
     // res.send("YOU HIT THE POST ROUTE !");
     var name = req.body.name;
     var imageUrl = req.body.image;
+    var description = req.body.description;
+
     var newCampground = {
         name: name,
-        image: imageUrl
+        image: imageUrl,
+        description: description
+
     };
-    
-    
-    
-Campground.create(newCampground, function (err, campground) {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log("Newly created campground");
-        console.log(campground);
-    }
-}); 
+
+
+
+    Campground.create(newCampground, function (err, campground) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Newly created campground");
+            console.log(campground);
+        }
+    });
     res.redirect("/campgrounds");
 });
 
@@ -76,18 +83,33 @@ app.get("/campgrounds/new", function (req, res) {
 
 app.get("/campgrounds", function (req, res) {
 
-    Campground.find({},function(err, allCampgrounds){
-        if(err){
+    Campground.find({}, function (err, allCampgrounds) {
+        if (err) {
             console.log(err);
-        } else{
-            res.render("campgrounds", {campgrounds: allCampgrounds});
+        } else {
+            res.render("index", {
+                campgrounds: allCampgrounds
+            });
         }
     });
-    
-    
-//    res.render("campgrounds", {
-//        campgrounds: campgrounds
-//    });
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.get("/campgrounds/:id", function (req, res) {
+            //res.send("THIS WILL BE THE SHOW PAGE OF " + req.params.id)
+
+            Campground.findById( req.params.id
+            , function (err, campground) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.render("show", {
+                        campground: campground
+                    });
+                }
+
+            });
+
+        });
+
+
+        app.listen(port, () => console.log(`Example app listening on port ${port}!`));
