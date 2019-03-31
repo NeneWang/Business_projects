@@ -14,6 +14,15 @@ mongoose.connect("mongodb://localhost:27017/yelp_camp", {
     useNewUrlParser: true
 })
 
+
+
+
+
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+
 //SCHEMA SETUP
 var campgroundSchema = new mongoose.Schema({
     name: String,
@@ -24,13 +33,6 @@ var campgroundSchema = new mongoose.Schema({
 var Campground = mongoose.model("Campground", campgroundSchema);
 
 
-
-
-
-
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
 
 app.get("/", function (req, res) {
     res.render("landing");
