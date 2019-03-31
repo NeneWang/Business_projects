@@ -1,41 +1,35 @@
-var express = require("express");
-var app = express();
+var express = require("express"),
+    bodyParser = require("body-parser"),
+    mongoose = require("mongoose"),
+    app = express();
+
+
 const port = 3000;
+app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-var bodyParser = require("body-parser");
+
+//SCHEMA SETUP
+var campgroundSchema = new mongoose.Schema({
+    name: String,
+    image: String
+});
+
+var Campground = mongoose.model("Campground", campgroundSchema);
+
+Campground.create(
+ {
+        name: "Salmon Creek",
+        image: "https://pics.me.me/i-love-thats-lolis-and-right-i-think-flat-chests-a-2914556.png"
+        },function(err, campground){
+            if(err){
+                console.log(err);
+            }else{
+                console.log("Newly created campgrtound");
+                console.log(campground);
+            }
+        });
+
 var campgrounds = [
-    {
-        name: "Salmon Creek",
-        image: "https://pics.me.me/i-love-thats-lolis-and-right-i-think-flat-chests-a-2914556.png"
-        },
-    {
-        name: "Granite Hill",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJ9VeZL1DNH5rVVVogUA41bj3bgW2cy_X-0Le5l1esA2cqPwv6"
-        },
-    {
-        name: "Salmon Creek",
-        image: "https://pics.me.me/i-love-thats-lolis-and-right-i-think-flat-chests-a-2914556.png"
-        },
-    {
-        name: "Granite Hill",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJ9VeZL1DNH5rVVVogUA41bj3bgW2cy_X-0Le5l1esA2cqPwv6"
-        },
-    {
-        name: "Salmon Creek",
-        image: "https://pics.me.me/i-love-thats-lolis-and-right-i-think-flat-chests-a-2914556.png"
-        },
-    {
-        name: "Granite Hill",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJ9VeZL1DNH5rVVVogUA41bj3bgW2cy_X-0Le5l1esA2cqPwv6"
-        },
-    {
-        name: "Salmon Creek",
-        image: "https://pics.me.me/i-love-thats-lolis-and-right-i-think-flat-chests-a-2914556.png"
-        },
-    {
-        name: "Granite Hill",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJ9VeZL1DNH5rVVVogUA41bj3bgW2cy_X-0Le5l1esA2cqPwv6"
-        },
     {
         name: "Salmon Creek",
         image: "https://pics.me.me/i-love-thats-lolis-and-right-i-think-flat-chests-a-2914556.png"
