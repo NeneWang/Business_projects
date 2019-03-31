@@ -5,8 +5,12 @@ var express = require("express"),
 
 
 const port = 3000;
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.set("view engine", "ejs");
+
+mongoose.connect("mongodb://localhost:27017/yelp_camp", {useNewUrlParser: true})
 
 //SCHEMA SETUP
 var campgroundSchema = new mongoose.Schema({
@@ -16,34 +20,11 @@ var campgroundSchema = new mongoose.Schema({
 
 var Campground = mongoose.model("Campground", campgroundSchema);
 
-Campground.create(
- {
-        name: "Salmon Creek",
-        image: "https://pics.me.me/i-love-thats-lolis-and-right-i-think-flat-chests-a-2914556.png"
-        },function(err, campground){
-            if(err){
-                console.log(err);
-            }else{
-                console.log("Newly created campgrtound");
-                console.log(campground);
-            }
-        });
 
-var campgrounds = [
-    {
-        name: "Salmon Creek",
-        image: "https://pics.me.me/i-love-thats-lolis-and-right-i-think-flat-chests-a-2914556.png"
-        },
-    {
-        name: "Granite Hill",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJ9VeZL1DNH5rVVVogUA41bj3bgW2cy_X-0Le5l1esA2cqPwv6"
-        },
 
-    {
-        name: "Mountain Goat's Rest",
-        image: "https://funnyanimepics.files.wordpress.com/2018/04/mitsuboshi-ep9-weapon.jpg?w=809"
-        }
-    ]
+
+
+
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -60,7 +41,17 @@ app.post("/campgrounds", function (req, res) {
         name: name,
         image: imageUrl
     };
-    campgrounds.push(newCampground);
+    
+    
+    
+Campground.create(newCampground, function (err, campground) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log("Newly created campground");
+        console.log(campground);
+    }
+}); 
     res.redirect("/campgrounds");
 });
 
@@ -85,9 +76,18 @@ app.get("/campgrounds/new", function (req, res) {
 
 app.get("/campgrounds", function (req, res) {
 
-    res.render("campgrounds", {
-        campgrounds: campgrounds
+    Campground.find({},function(err, allCampgrounds){
+        if(err){
+            console.log(err);
+        } else{
+            res.render("campgrounds", {campgrounds: allCampgrounds});
+        }
     });
+    
+    
+//    res.render("campgrounds", {
+//        campgrounds: campgrounds
+//    });
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
