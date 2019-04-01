@@ -3,21 +3,21 @@ var express = require("express"),
     mongoose = require("mongoose"),
     app = express(),
     Campground = require("./models/campground"),
+    Comment = require("./models/comment"),
     seedDB = require("./seed.js");
 
 seedDB();
-    const port = 3000;
+const port = 3000;
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.set("view engine", "ejs");
+app.use(express.static(__dirname + "/public")); // __dirname is a constants that has the local direction of the project
+console.log(__dirname);
 
 mongoose.connect("mongodb://localhost:27017/yelp_camp", {
     useNewUrlParser: true
 })
-
-
-
 
 
 app.use(bodyParser.urlencoded({
@@ -26,9 +26,6 @@ app.use(bodyParser.urlencoded({
 
 
 //SCHEMA SETUP
-
-
-
 
 app.get("/", function (req, res) {
     res.render("landing");
@@ -62,7 +59,7 @@ app.post("/campgrounds", function (req, res) {
 
 app.get("/campgrounds/new", function (req, res) {
     //render the form to crereate a new campground post
-    res.render("new.ejs");
+    res.render("campgrounds/new");
 
     var name = req.body.name;
     var imageUrl = req.body.image;
@@ -85,7 +82,7 @@ app.get("/campgrounds", function (req, res) {
         if (err) {
             console.log(err);
         } else {
-            res.render("index", {
+            res.render("campgrounds/index", {
                 campgrounds: allCampgrounds
             });
         }
@@ -95,17 +92,56 @@ app.get("/campgrounds", function (req, res) {
 app.get("/campgrounds/:id", function (req, res) {
     //res.send("THIS WILL BE THE SHOW PAGE OF " + req.params.id)
 
+    Campground.findById(req.params.id).populate("comments").exec(
+        function (err, campground) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(campground);
+                res.render("campgrounds/show", {
+                    campground: campground
+                });
+            }
+
+        });
+
+});
+
+// ==========================
+// COMMENTS ROUTES
+// ==========================
+
+
+app.get("/campgrounds/:id/comments/new", function (req, res) {
     Campground.findById(req.params.id, function (err, campground) {
         if (err) {
             console.log(err);
         } else {
-            res.render("show", {
+            res.render("comments/new", {
                 campground: campground
             });
         }
+    })
+});
 
-    });
+app.post("/campgrounds/:id/comments", function(req, res) {
 
+    Campground.findById(req.params.id, function (err, campground) {
+        if (err) {
+                console.log(err);
+                res.redirect("/campgrounds");
+            } else{
+                Comment.create(req.body.comment, function(err, comment){
+                    if(err){
+                        console.log(err);
+                    } else{
+                        campground.comments.push(comment);
+                        campground.save();
+                        res.redirect("/campgrounds/"+campground._id);
+                    }
+                })
+            }
+    })
 });
 
 
