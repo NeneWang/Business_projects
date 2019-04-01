@@ -1,10 +1,12 @@
 var express = require("express"),
     bodyParser = require("body-parser"),
     mongoose = require("mongoose"),
-    app = express();
+    app = express(),
+    Campground = require("./models/campground"),
+    seedDB = require("./seed.js");
 
-
-const port = 3000;
+seedDB();
+    const port = 3000;
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -24,13 +26,7 @@ app.use(bodyParser.urlencoded({
 
 
 //SCHEMA SETUP
-var campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-});
 
-var Campground = mongoose.model("Campground", campgroundSchema);
 
 
 
@@ -97,21 +93,20 @@ app.get("/campgrounds", function (req, res) {
 });
 
 app.get("/campgrounds/:id", function (req, res) {
-            //res.send("THIS WILL BE THE SHOW PAGE OF " + req.params.id)
+    //res.send("THIS WILL BE THE SHOW PAGE OF " + req.params.id)
 
-            Campground.findById( req.params.id
-            , function (err, campground) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.render("show", {
-                        campground: campground
-                    });
-                }
-
+    Campground.findById(req.params.id, function (err, campground) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("show", {
+                campground: campground
             });
+        }
 
-        });
+    });
+
+});
 
 
-        app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
