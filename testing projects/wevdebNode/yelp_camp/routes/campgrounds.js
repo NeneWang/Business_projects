@@ -3,63 +3,46 @@ var router = express.Router();
 
 var Campground = require("../models/campground");
 
-router.post("/", function (req, res) {
-    // res.send("YOU HIT THE POST ROUTE !");
-    var name = req.body.name;
-    var imageUrl = req.body.image;
-    var description = req.body.description;
-
-    var newCampground = {
-        name: name,
-        image: imageUrl,
-        description: description
-
-    };
-
-
-
-    Campground.create(newCampground, function (err, campground) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("Newly created campground");
-            console.log(campground);
-        }
+//INDEX - show all campgrounds
+router.get("/", function(req, res){
+    // Get all campgrounds from DB
+    Campground.find({}, function(err, allCampgrounds){
+       if(err){
+           console.log(err);
+       } else {
+          res.render("campgrounds/index",{campgrounds:allCampgrounds});
+       }
     });
-    res.redirect("/campgrounds");
 });
 
-router.get("/campgrounds/new", function (req, res) {
-    //render the form to crereate a new campground post
-    res.render("campgrounds/new");
-
+//CREATE - add new campground to DB
+router.post("/", isLoggedIn, function(req, res){
+    // get data from form and add to campgrounds array
     var name = req.body.name;
-    var imageUrl = req.body.image;
-    var newCampground = {
-        name: name,
-        image: image
-    };
-    campgrounds.push(newCampground);
-    res.redirect("/campgrounds");
-
-});
-
-
-
-
-
-router.get("/", function (req, res) {
-
-    Campground.find({}, function (err, allCampgrounds) {
-        if (err) {
+    var image = req.body.image;
+    var desc = req.body.description;
+    var author = {
+        id : req.user._ud,
+        username: req.user.username
+    }
+    var newCampground = {name: name, image: image, description: desc, author: author}
+    console.log(req.user);
+    // Create a new campground and save to DB
+    Campground.create(newCampground, function(err, newlyCreated){
+        if(err){
             console.log(err);
         } else {
-            res.render("campgrounds/index", {
-                campgrounds: allCampgrounds, currentUser: req.user
-            });
+            //redirect back to campgrounds page
+            res.redirect("/campgrounds");
         }
     });
 });
+
+//NEW - show form to create new campground
+router.get("/new",isLoggedIn , function(req, res){
+   res.render("campgrounds/new"); 
+});
+
 
 router.get("/:id", function (req, res) {
     //res.send("THIS WILL BE THE SHOW PAGE OF " + req.params.id)

@@ -9,11 +9,12 @@ var express = require("express"),
     app = express(),
     seedDB = require("./seed.js");
 
-
+//Requireing ROutes
 var commentRoutes = require("./routes/comments"),
     campergroundRoutes = require("./routes/campgrounds"),
     indexRoutes = require("./routes/index");
-seedDB();
+
+//seedDB(); //Seed the database
 const port = 3000;
 app.use(bodyParser.urlencoded({
     extended: true
@@ -35,10 +36,10 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
+//Using Routes
 app.use(indexRoutes);
 app.use("/campgrounds", campergroundRoutes);
 app.use("/campgrounds/:id/comments" , commentRoutes);
-
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public")); // __dirname is a constants that has the local direction of the project
 console.log(__dirname);
